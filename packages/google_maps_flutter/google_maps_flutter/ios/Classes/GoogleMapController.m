@@ -118,6 +118,10 @@ static double ToDouble(NSNumber* data) { return [FLTGoogleMapJsonConversions toD
     if ([circlesToAdd isKindOfClass:[NSArray class]]) {
       [_circlesController addCircles:circlesToAdd];
     }
+    id tileOverlaysToAdd = call.arguments[@"tileOverlaysToAdd"];
+    if ([tileOverlaysToAdd isKindOfClass:[NSArray class]]) {
+      [_tileOverlaysController addTileOverlays:tileOverlaysToAdd];
+    }
   }
   return self;
 }
