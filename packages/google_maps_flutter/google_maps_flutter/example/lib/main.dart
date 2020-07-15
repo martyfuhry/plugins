@@ -5,7 +5,11 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:google_maps_flutter_example/tile_overlay.dart';
+=======
+import 'package:google_maps_flutter_example/lite_mode.dart';
+>>>>>>> master
 import 'animate_camera.dart';
 import 'map_click.dart';
 import 'map_coordinates.dart';
@@ -21,7 +25,7 @@ import 'place_polyline.dart';
 import 'scrolling_map.dart';
 import 'snapshot.dart';
 
-final List<Page> _allPages = <Page>[
+final List<GoogleMapExampleAppPage> _allPages = <GoogleMapExampleAppPage>[
   MapUiPage(),
   MapCoordinatesPage(),
   MapClickPage(),
@@ -36,10 +40,11 @@ final List<Page> _allPages = <Page>[
   PaddingPage(),
   TileOverlayPage(),
   SnapshotPage(),
+  LiteModePage(),
 ];
 
 class MapsDemo extends StatelessWidget {
-  void _pushPage(BuildContext context, Page page) {
+  void _pushPage(BuildContext context, GoogleMapExampleAppPage page) {
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (_) => Scaffold(
               appBar: AppBar(title: Text(page.title)),

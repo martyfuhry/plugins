@@ -10,14 +10,6 @@ part of google_maps_flutter;
 /// map is created.
 typedef void MapCreatedCallback(GoogleMapController controller);
 
-/// Callback that receives updates to the camera position.
-///
-/// This callback is triggered when the platform Google Map
-/// registers a camera movement.
-///
-/// This is used in [GoogleMap.onCameraMove].
-typedef void CameraPositionCallback(CameraPosition position);
-
 /// A widget which displays a map with data obtained from the Google Maps service.
 class GoogleMap extends StatefulWidget {
   /// Creates a widget displaying data from Google Maps services.
@@ -35,7 +27,9 @@ class GoogleMap extends StatefulWidget {
     this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
     this.rotateGesturesEnabled = true,
     this.scrollGesturesEnabled = true,
+    this.zoomControlsEnabled = true,
     this.zoomGesturesEnabled = true,
+    this.liteModeEnabled = false,
     this.tiltGesturesEnabled = true,
     this.myLocationEnabled = false,
     this.myLocationButtonEnabled = true,
@@ -89,8 +83,19 @@ class GoogleMap extends StatefulWidget {
   /// True if the map view should respond to scroll gestures.
   final bool scrollGesturesEnabled;
 
+  /// True if the map view should show zoom controls. This includes two buttons
+  /// to zoom in and zoom out. The default value is to show zoom controls.
+  ///
+  /// This is only supported on Android. And this field is silently ignored on iOS.
+  final bool zoomControlsEnabled;
+
   /// True if the map view should respond to zoom gestures.
   final bool zoomGesturesEnabled;
+
+  /// True if the map view should be in lite mode. Android only.
+  ///
+  /// See https://developers.google.com/maps/documentation/android-sdk/lite#overview_of_lite_mode for more details.
+  final bool liteModeEnabled;
 
   /// True if the map view should respond to tilt gestures.
   final bool tiltGesturesEnabled;
@@ -226,26 +231,11 @@ class _GoogleMapState extends State<GoogleMap> {
       'circlesToAdd': _serializeCircleSet(widget.circles),
       'tileOverlaysToAdd': _serializeTileOverlaySet(widget.tileOverlays),
     };
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'plugins.flutter.io/google_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: widget.gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return UiKitView(
-        viewType: 'plugins.flutter.io/google_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: widget.gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
-    }
-
-    return Text(
-        '$defaultTargetPlatform is not yet supported by the maps plugin');
+    return _googleMapsFlutterPlatform.buildView(
+      creationParams,
+      widget.gestureRecognizers,
+      onPlatformViewCreated,
+    );
   }
 
   @override
@@ -287,32 +277,32 @@ class _GoogleMapState extends State<GoogleMap> {
     final GoogleMapController controller = await _controller.future;
     // ignore: unawaited_futures
     controller._updateMarkers(
-        _MarkerUpdates.from(_markers.values.toSet(), widget.markers));
-    _markers = _keyByMarkerId(widget.markers);
+        MarkerUpdates.from(_markers.values.toSet(), widget.markers));
+    _markers = keyByMarkerId(widget.markers);
   }
 
   void _updatePolygons() async {
     final GoogleMapController controller = await _controller.future;
     // ignore: unawaited_futures
     controller._updatePolygons(
-        _PolygonUpdates.from(_polygons.values.toSet(), widget.polygons));
-    _polygons = _keyByPolygonId(widget.polygons);
+        PolygonUpdates.from(_polygons.values.toSet(), widget.polygons));
+    _polygons = keyByPolygonId(widget.polygons);
   }
 
   void _updatePolylines() async {
     final GoogleMapController controller = await _controller.future;
     // ignore: unawaited_futures
     controller._updatePolylines(
-        _PolylineUpdates.from(_polylines.values.toSet(), widget.polylines));
-    _polylines = _keyByPolylineId(widget.polylines);
+        PolylineUpdates.from(_polylines.values.toSet(), widget.polylines));
+    _polylines = keyByPolylineId(widget.polylines);
   }
 
   void _updateCircles() async {
     final GoogleMapController controller = await _controller.future;
     // ignore: unawaited_futures
     controller._updateCircles(
-        _CircleUpdates.from(_circles.values.toSet(), widget.circles));
-    _circles = _keyByCircleId(widget.circles);
+        CircleUpdates.from(_circles.values.toSet(), widget.circles));
+    _circles = keyByCircleId(widget.circles);
   }
 
   void _updateTileOverlays() async {
@@ -335,45 +325,39 @@ class _GoogleMapState extends State<GoogleMap> {
     }
   }
 
-  void onMarkerTap(String markerIdParam) {
-    assert(markerIdParam != null);
-    final MarkerId markerId = MarkerId(markerIdParam);
+  void onMarkerTap(MarkerId markerId) {
+    assert(markerId != null);
     if (_markers[markerId]?.onTap != null) {
       _markers[markerId].onTap();
     }
   }
 
-  void onMarkerDragEnd(String markerIdParam, LatLng position) {
-    assert(markerIdParam != null);
-    final MarkerId markerId = MarkerId(markerIdParam);
+  void onMarkerDragEnd(MarkerId markerId, LatLng position) {
+    assert(markerId != null);
     if (_markers[markerId]?.onDragEnd != null) {
       _markers[markerId].onDragEnd(position);
     }
   }
 
-  void onPolygonTap(String polygonIdParam) {
-    assert(polygonIdParam != null);
-    final PolygonId polygonId = PolygonId(polygonIdParam);
+  void onPolygonTap(PolygonId polygonId) {
+    assert(polygonId != null);
     _polygons[polygonId].onTap();
   }
 
-  void onPolylineTap(String polylineIdParam) {
-    assert(polylineIdParam != null);
-    final PolylineId polylineId = PolylineId(polylineIdParam);
+  void onPolylineTap(PolylineId polylineId) {
+    assert(polylineId != null);
     if (_polylines[polylineId]?.onTap != null) {
       _polylines[polylineId].onTap();
     }
   }
 
-  void onCircleTap(String circleIdParam) {
-    assert(circleIdParam != null);
-    final CircleId circleId = CircleId(circleIdParam);
+  void onCircleTap(CircleId circleId) {
+    assert(circleId != null);
     _circles[circleId].onTap();
   }
 
-  void onInfoWindowTap(String markerIdParam) {
-    assert(markerIdParam != null);
-    final MarkerId markerId = MarkerId(markerIdParam);
+  void onInfoWindowTap(MarkerId markerId) {
+    assert(markerId != null);
     if (_markers[markerId]?.infoWindow?.onTap != null) {
       _markers[markerId].infoWindow.onTap();
     }
@@ -424,14 +408,20 @@ class _GoogleMapOptions {
     this.scrollGesturesEnabled,
     this.tiltGesturesEnabled,
     this.trackCameraPosition,
+    this.zoomControlsEnabled,
     this.zoomGesturesEnabled,
+    this.liteModeEnabled,
     this.myLocationEnabled,
     this.myLocationButtonEnabled,
     this.padding,
     this.indoorViewEnabled,
     this.trafficEnabled,
     this.buildingsEnabled,
-  });
+  }) {
+    assert(liteModeEnabled == null ||
+        !liteModeEnabled ||
+        (liteModeEnabled && Platform.isAndroid));
+  }
 
   static _GoogleMapOptions fromWidget(GoogleMap map) {
     return _GoogleMapOptions(
@@ -444,7 +434,9 @@ class _GoogleMapOptions {
       scrollGesturesEnabled: map.scrollGesturesEnabled,
       tiltGesturesEnabled: map.tiltGesturesEnabled,
       trackCameraPosition: map.onCameraMove != null,
+      zoomControlsEnabled: map.zoomControlsEnabled,
       zoomGesturesEnabled: map.zoomGesturesEnabled,
+      liteModeEnabled: map.liteModeEnabled,
       myLocationEnabled: map.myLocationEnabled,
       myLocationButtonEnabled: map.myLocationButtonEnabled,
       padding: map.padding,
@@ -472,7 +464,11 @@ class _GoogleMapOptions {
 
   final bool trackCameraPosition;
 
+  final bool zoomControlsEnabled;
+
   final bool zoomGesturesEnabled;
+
+  final bool liteModeEnabled;
 
   final bool myLocationEnabled;
 
@@ -497,13 +493,15 @@ class _GoogleMapOptions {
 
     addIfNonNull('compassEnabled', compassEnabled);
     addIfNonNull('mapToolbarEnabled', mapToolbarEnabled);
-    addIfNonNull('cameraTargetBounds', cameraTargetBounds?._toJson());
+    addIfNonNull('cameraTargetBounds', cameraTargetBounds?.toJson());
     addIfNonNull('mapType', mapType?.index);
-    addIfNonNull('minMaxZoomPreference', minMaxZoomPreference?._toJson());
+    addIfNonNull('minMaxZoomPreference', minMaxZoomPreference?.toJson());
     addIfNonNull('rotateGesturesEnabled', rotateGesturesEnabled);
     addIfNonNull('scrollGesturesEnabled', scrollGesturesEnabled);
     addIfNonNull('tiltGesturesEnabled', tiltGesturesEnabled);
+    addIfNonNull('zoomControlsEnabled', zoomControlsEnabled);
     addIfNonNull('zoomGesturesEnabled', zoomGesturesEnabled);
+    addIfNonNull('liteModeEnabled', liteModeEnabled);
     addIfNonNull('trackCameraPosition', trackCameraPosition);
     addIfNonNull('myLocationEnabled', myLocationEnabled);
     addIfNonNull('myLocationButtonEnabled', myLocationButtonEnabled);
