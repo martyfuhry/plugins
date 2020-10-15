@@ -602,6 +602,12 @@ final class GoogleMapController
       return;
     }
     mapView.onResume();
+    
+    // Workaround for https://github.com/flutter/flutter/issues/40284
+    // This apparently forces a re-render of the map.
+    if (googleMap != null) {
+      googleMap.setMapType(googleMap.getMapType());
+    }
   }
 
   @Override
