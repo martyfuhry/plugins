@@ -7,9 +7,9 @@ import 'types.dart';
 /// [TileProvider] update events to be applied to the [GoogleMap].
 ///
 /// Used in [GoogleMapController] when the map is updated.
-class _TileOverlayUpdates {
+class TileOverlayUpdates {
   /// Computes [_MarkerUpdates] given previous and current [Marker]s.
-  _TileOverlayUpdates.from(
+  TileOverlayUpdates.from(
       Set<TileOverlay> previous, Set<TileOverlay> current) {
     if (previous == null) {
       previous = Set<TileOverlay>.identity();
@@ -89,7 +89,7 @@ class _TileOverlayUpdates {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    final _TileOverlayUpdates typedOther = other;
+    final TileOverlayUpdates typedOther = other;
     return setEquals(tileOverlaysToAdd, typedOther.tileOverlaysToAdd) &&
         setEquals(tileOverlayIdsToRemove, typedOther.tileOverlayIdsToRemove) &&
         setEquals(tileOverlaysToChange, typedOther.tileOverlaysToChange);
@@ -101,7 +101,7 @@ class _TileOverlayUpdates {
 
   @override
   String toString() {
-    return '_TileOverlayUpdates{tileOverlaysToAdd: $tileOverlaysToAdd, '
+    return 'TileOverlayUpdates{tileOverlaysToAdd: $tileOverlaysToAdd, '
         'tileOverlayIdsToRemove: $tileOverlayIdsToRemove, '
         'tileOverlaysToChange: $tileOverlaysToChange}';
   }
