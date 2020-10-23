@@ -69,6 +69,15 @@ class _GetTileMapEvent<T> extends MapEvent<T> {
   _GetTileMapEvent(int mapId, T value, this.tileOverlayId, this.x, this.y, this.zoom) : super(mapId, value);
 }
 
+class _GotTileMapEvent<T> extends MapEvent<T> {
+  final String tileOverlayId;
+  final int x;
+  final int y;
+  final int zoom;
+  final dynamic tile;
+
+  _GotTileMapEvent(int mapId, T value, this.tileOverlayId, this.x, this.y, this.zoom, this.tile) : super(mapId, value);
+}
 // The following events are the ones exposed to the end user. They are semantic extensions
 // of the two base classes above.
 //
@@ -168,7 +177,7 @@ class GetTileEvent extends _GetTileMapEvent<void> {
         super(mapId, null, tileOverlayId, x, y, zoom);
 }
 
-class TileEvent extends _GetTileMapEvent<dynamic> {
+class TileEvent extends _GotTileMapEvent<void> {
   TileEvent(int mapId, String tileOverlayId, int x, int y, int zoom, dynamic tile):
-      super(mapId, tile, tileOverlayId, x, y, zoom);
+      super(mapId, null, tileOverlayId, x, y, zoom, tile);
 }

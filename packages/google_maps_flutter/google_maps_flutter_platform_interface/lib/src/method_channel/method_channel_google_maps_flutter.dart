@@ -210,7 +210,8 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
             .whereType<TileEvent>()
             .firstWhere((e) => e.x == call.arguments['x'] &&
               e.y == call.arguments['y'] && e.zoom == call.arguments['zoom'] &&
-              e.tileOverlayId == call.arguments['tileOverlayId']);
+              e.tileOverlayId == call.arguments['tileOverlayId'])
+            .then((e) => e.tile);
 
         break;
       default:
