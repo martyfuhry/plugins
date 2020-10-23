@@ -60,6 +60,15 @@ class _PositionedMapEvent<T> extends MapEvent<T> {
   _PositionedMapEvent(int mapId, this.position, T value) : super(mapId, value);
 }
 
+class _GetTileMapEvent<T> extends MapEvent<T> {
+  final String tileOverlayId;
+  final int x;
+  final int y;
+  final int zoom;
+
+  _GetTileMapEvent(int mapId, T value, this.tileOverlayId, this.x, this.y, this.zoom) : super(mapId, value);
+}
+
 // The following events are the ones exposed to the end user. They are semantic extensions
 // of the two base classes above.
 //
@@ -153,7 +162,8 @@ class MapLongPressEvent extends _PositionedMapEvent<void> {
 }
 
 /// An event fired when the Map requests a tile
-class GetTileEvent extends MapEvent<void> {
+class GetTileEvent extends _GetTileMapEvent<void> {
   /// Builds a get tile event
-  GetTileEvent(int mapId, String tileOverlayId, int x, int y, int zoom) : super(mapId, null);
+  GetTileEvent(int mapId, String tileOverlayId, int x, int y, int zoom) :
+        super(mapId, null, tileOverlayId, x, y, zoom);
 }
