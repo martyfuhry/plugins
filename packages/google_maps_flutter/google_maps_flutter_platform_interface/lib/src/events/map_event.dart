@@ -155,5 +155,5 @@ class MapLongPressEvent extends _PositionedMapEvent<void> {
 /// An event fired when the Map requests a tile
 class GetTileEvent extends MapEvent<void> {
   /// Builds a get tile event
-  GetTileEvent(int mapId, TileOverlayId tileOverlayId, int x, int y, int zoom) : super(mapId, null);
+  GetTileEvent(int mapId, String tileOverlayId, int x, int y, int zoom) : super(mapId, null);
 }

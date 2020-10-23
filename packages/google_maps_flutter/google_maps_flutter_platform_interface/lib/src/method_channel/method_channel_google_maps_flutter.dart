@@ -13,6 +13,8 @@ import 'package:flutter/gestures.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import '../../google_maps_flutter_platform_interface.dart';
+
 /// An implementation of [GoogleMapsFlutterPlatform] that uses [MethodChannel] to communicate with the native code.
 ///
 /// The `google_maps_flutter` plugin code itself never talks to the native code directly. It delegates
@@ -119,6 +121,11 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
   @override
   Stream<MapLongPressEvent> onLongPress({@required int mapId}) {
     return _events(mapId).whereType<MapLongPressEvent>();
+  }
+
+  @override
+  Stream<GetTileEvent> onGetTile({@required int mapId}) {
+    return _events(mapId).whereType<GetTileEvent>();
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call, int mapId) async {

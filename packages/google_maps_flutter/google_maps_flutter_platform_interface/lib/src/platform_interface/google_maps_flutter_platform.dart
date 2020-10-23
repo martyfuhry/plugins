@@ -282,6 +282,10 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('onInfoWindowTap() has not been implemented.');
   }
 
+  Stream<GetTileEvent> onGetTile({@required int mapId}) {
+    throw UnimplementedError('onGetTile() has not been implemented.');
+  }
+
   /// A [Marker] has been dragged to a different [LatLng] position.
   Stream<MarkerDragEndEvent> onMarkerDragEnd({@required int mapId}) {
     throw UnimplementedError('onMarkerDragEnd() has not been implemented.');
