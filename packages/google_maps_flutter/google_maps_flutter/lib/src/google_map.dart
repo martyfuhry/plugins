@@ -233,11 +233,11 @@ class _GoogleMapState extends State<GoogleMap> {
     final Map<String, dynamic> creationParams = <String, dynamic>{
       'initialCameraPosition': widget.initialCameraPosition?.toMap(),
       'options': _googleMapOptions.toMap(),
-      'markersToAdd': _serializeMarkerSet(widget.markers),
-      'polygonsToAdd': _serializePolygonSet(widget.polygons),
-      'polylinesToAdd': _serializePolylineSet(widget.polylines),
-      'circlesToAdd': _serializeCircleSet(widget.circles),
-      'tileOverlaysToAdd': _serializeTileOverlaySet(widget.tileOverlays),
+      'markersToAdd': serializeMarkerSet(widget.markers),
+      'polygonsToAdd': serializePolygonSet(widget.polygons),
+      'polylinesToAdd': serializePolylineSet(widget.polylines),
+      'circlesToAdd': serializeCircleSet(widget.circles),
+      'tileOverlaysToAdd': serializeTileOverlaySet(widget.tileOverlays),
       '_webOnlyMapCreationId': _webOnlyMapCreationId,
     };
 
@@ -252,11 +252,11 @@ class _GoogleMapState extends State<GoogleMap> {
   void initState() {
     super.initState();
     _googleMapOptions = _GoogleMapOptions.fromWidget(widget);
-    _markers = _keyByMarkerId(widget.markers);
-    _polygons = _keyByPolygonId(widget.polygons);
-    _polylines = _keyByPolylineId(widget.polylines);
-    _circles = _keyByCircleId(widget.circles);
-    _tileOverlays = _keyTileOverlayId(widget.tileOverlays);
+    _markers = keyByMarkerId(widget.markers);
+    _polygons = keyByPolygonId(widget.polygons);
+    _polylines = keyByPolylineId(widget.polylines);
+    _circles = keyByCircleId(widget.circles);
+    _tileOverlays = keyTileOverlayId(widget.tileOverlays);
   }
 
   @override

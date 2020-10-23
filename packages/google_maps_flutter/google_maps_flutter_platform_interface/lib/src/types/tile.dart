@@ -16,7 +16,7 @@ class Tile {
   /// A byte array containing the image data.
   final Uint8List data;
 
-  dynamic _toJson() {
+  dynamic toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
 
     void addIfPresent(String fieldName, dynamic value) {
