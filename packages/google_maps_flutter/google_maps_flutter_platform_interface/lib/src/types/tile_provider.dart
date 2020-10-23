@@ -1,4 +1,5 @@
-part of google_maps_flutter;
+import 'dart:ui' show hashValues;
+import 'package:meta/meta.dart' show immutable, required;
 
 /// An interface for a class that provides the tile images for a TileOverlay.
 abstract class TileProvider {

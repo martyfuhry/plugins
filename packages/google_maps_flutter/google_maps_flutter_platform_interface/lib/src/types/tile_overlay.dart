@@ -1,4 +1,5 @@
-part of google_maps_flutter;
+import 'dart:ui' show hashValues;
+import 'package:meta/meta.dart' show immutable, required;
 
 /// Uniquely identifies a [TileOverlay] among [GoogleMap] tile overlays.
 ///
