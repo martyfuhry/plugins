@@ -94,7 +94,6 @@ class GoogleMapController {
     _googleMapsFlutterPlatform.onGetTile(mapId: mapId).listen(
         (GetTileEvent e) =>
             _googleMapState.onGetTile(e.tileOverlayId, e.x, e.y, e.zoom));
-    )
   }
 
   /// Updates configuration options of the map user interface.
