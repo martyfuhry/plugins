@@ -176,11 +176,11 @@ class GoogleMapController {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> _updateTileOverlays(
-      _TileOverlayUpdates tileOverlayUpdates) async {
+      TileOverlayUpdates tileOverlayUpdates) async {
     assert(tileOverlayUpdates != null);
     await channel.invokeMethod<void>(
       'tileOverlays#update',
-      tileOverlayUpdates._toMap(),
+      tileOverlayUpdates.toMap(),
     );
   }
 

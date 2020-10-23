@@ -63,7 +63,7 @@ class TileOverlayUpdates {
   Set<TileOverlayId> tileOverlayIdsToRemove;
   Set<TileOverlay> tileOverlaysToChange;
 
-  Map<String, dynamic> _toMap() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> updateMap = <String, dynamic>{};
 
     void addIfNonNull(String fieldName, dynamic value) {
