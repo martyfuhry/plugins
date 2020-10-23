@@ -92,7 +92,7 @@ class GoogleMapController {
     _googleMapsFlutterPlatform.onLongPress(mapId: mapId).listen(
         (MapLongPressEvent e) => _googleMapState.onLongPress(e.position));
     _googleMapsFlutterPlatform.onGetTile(mapId: mapId).listen(
-        (GetTileEvent e) =>
+        (GetTileEvent e) async => await
             _googleMapState.onGetTile(e.tileOverlayId, e.x, e.y, e.zoom));
   }
 
