@@ -167,3 +167,8 @@ class GetTileEvent extends _GetTileMapEvent<void> {
   GetTileEvent(int mapId, String tileOverlayId, int x, int y, int zoom) :
         super(mapId, null, tileOverlayId, x, y, zoom);
 }
+
+class TileEvent extends _GetTileMapEvent<dynamic> {
+  TileEvent(int mapId, String tileOverlayId, intx, int y, int zoom, dynamic tile):
+      super(mapId, tile, tileOverlayId, x, y, zoom);
+}

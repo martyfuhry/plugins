@@ -128,6 +128,13 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
     return _events(mapId).whereType<GetTileEvent>();
   }
 
+  @override
+  void onGotTile(int mapId, String tileOverlayId, int x, int y, int zoom, dynamic tile) {
+    _mapEventStreamController.add(TileEvent(
+      mapId, tileOverlayId, x, y, zoom, tile
+    ));
+  }
+
   Future<dynamic> _handleMethodCall(MethodCall call, int mapId) async {
     switch (call.method) {
       case 'camera#onMoveStarted':
@@ -192,13 +199,19 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
         ));
         break;
       case 'tileOverlay#getTile':
-        return await _mapEventStreamController.add(GetTileEvent(
+        _mapEventStreamController.add(GetTileEvent(
           mapId,
           call.arguments['tileOverlayId'],
           call.arguments['x'],
           call.arguments['y'],
           call.arguments['zoom'],
         ));
+        return _events(mapId)
+            .whereType<TileEvent>()
+            .firstWhere((e) => e.x == call.arguments['x'] &&
+              e.y == call.arguments['y'] && e.zoom == call.arguments['zoom'] &&
+              e.tileOverlayId == call.arguments['tileOverlayId']);
+
         break;
       default:
         throw MissingPluginException();
