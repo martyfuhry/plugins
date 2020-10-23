@@ -151,3 +151,9 @@ class MapLongPressEvent extends _PositionedMapEvent<void> {
   /// The `position` of this event is the LatLng where the Map was long pressed.
   MapLongPressEvent(int mapId, LatLng position) : super(mapId, position, null);
 }
+
+/// An event fired when the Map requests a tile
+class GetTileEvent extends MapEvent<void> {
+  /// Builds a get tile event
+  GetTileEvent(int mapId, TileOverlayId tileOverlayId, int x, int y, int zoom) : super(mapId, null);
+}

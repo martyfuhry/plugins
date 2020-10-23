@@ -184,6 +184,15 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
           LatLng.fromJson(call.arguments['position']),
         ));
         break;
+      case 'tileOverlay#getTile':
+        return await _mapEventStreamController.add(GetTileEvent(
+          mapId,
+          call.arguments['tileOverlayId'],
+          call.arguments['x'],
+          call.arguments['y'],
+          call.arguments['zoom'],
+        ));
+        break;
       default:
         throw MissingPluginException();
     }
@@ -207,6 +216,37 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
         'options': optionsUpdate,
       },
     );
+  }
+
+  /// Updates tile overlays configuration.
+  ///
+  /// Change listeners are notified once the update has been made on the
+  /// platform side.
+  ///
+  /// The returned [Future] completes after listeners have been notified.
+  @override
+  Future<void> updateTileOverlays(
+      TileOverlayUpdates tileOverlayUpdates, {
+      @required int mapId}) async {
+    assert(tileOverlayUpdates != null);
+    await channel(mapId).invokeMethod<void>(
+      'tileOverlays#update',
+      tileOverlayUpdates.toMap(),
+    );
+  }
+
+  /// Clears the tile cache so that all tiles will be requested again from the
+  /// [TileProvider]. The current tiles from this tile overlay will also be
+  /// cleared from the map after calling this method. The API maintains a small
+  /// in-memory cache of tiles. If you want to cache tiles for longer, you
+  /// should implement an on-disk cache.
+  @override
+  Future<void> clearTileCache(TileOverlayId tileOverlayId, {
+    @required int mapId}) async {
+    await channel(mapId).invokeMethod<void>(
+      'tileOverlays#clearTileCache', <String, dynamic>{
+      'tileOverlayId': tileOverlayId.value,
+    });
   }
 
   /// Updates marker configuration.
