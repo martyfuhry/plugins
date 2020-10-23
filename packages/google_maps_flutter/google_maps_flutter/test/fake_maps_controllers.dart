@@ -44,6 +44,10 @@ class FakePlatformGoogleMap {
 
   bool zoomGesturesEnabled;
 
+  bool zoomControlsEnabled;
+
+  bool liteModeEnabled;
+
   bool trackCameraPosition;
 
   bool myLocationEnabled;
@@ -415,6 +419,12 @@ class FakePlatformGoogleMap {
     }
     if (options.containsKey('zoomGesturesEnabled')) {
       zoomGesturesEnabled = options['zoomGesturesEnabled'];
+    }
+    if (options.containsKey('zoomControlsEnabled')) {
+      zoomControlsEnabled = options['zoomControlsEnabled'];
+    }
+    if (options.containsKey('liteModeEnabled')) {
+      liteModeEnabled = options['liteModeEnabled'];
     }
     if (options.containsKey('myLocationEnabled')) {
       myLocationEnabled = options['myLocationEnabled'];
