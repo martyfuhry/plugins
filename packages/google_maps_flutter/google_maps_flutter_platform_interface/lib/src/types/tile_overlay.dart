@@ -1,6 +1,8 @@
 import 'dart:ui' show hashValues;
 import 'package:meta/meta.dart' show immutable, required;
 
+import 'types.dart';
+
 /// Uniquely identifies a [TileOverlay] among [GoogleMap] tile overlays.
 ///
 /// This does not have to be globally unique, only unique among the list.
@@ -116,7 +118,7 @@ class TileOverlay {
     );
   }
 
-  dynamic _toJson() {
+  dynamic toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
 
     void addIfPresent(String fieldName, dynamic value) {
@@ -152,22 +154,4 @@ class TileOverlay {
   int get hashCode => tileOverlayId.hashCode;
 }
 
-Map<TileOverlayId, TileOverlay> _keyTileOverlayId(
-    Iterable<TileOverlay> tileOverlays) {
-  if (tileOverlays == null) {
-    return <TileOverlayId, TileOverlay>{};
-  }
-  return Map<TileOverlayId, TileOverlay>.fromEntries(tileOverlays.map(
-      (TileOverlay tileOverlay) => MapEntry<TileOverlayId, TileOverlay>(
-          tileOverlay.tileOverlayId, tileOverlay)));
-}
 
-List<Map<String, dynamic>> _serializeTileOverlaySet(
-    Set<TileOverlay> tileOverlays) {
-  if (tileOverlays == null) {
-    return null;
-  }
-  return tileOverlays
-      .map<Map<String, dynamic>>((TileOverlay p) => p._toJson())
-      .toList();
-}

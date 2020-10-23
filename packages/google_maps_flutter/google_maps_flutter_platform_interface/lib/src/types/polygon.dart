@@ -5,6 +5,7 @@
 import 'package:flutter/foundation.dart' show listEquals, VoidCallback;
 import 'package:flutter/material.dart' show Color, Colors;
 import 'package:meta/meta.dart' show immutable, required;
+import 'package:collection/collection.dart';
 
 import 'types.dart';
 
@@ -205,7 +206,7 @@ class Polygon {
     for (final List<LatLng> hole in holes) {
       final List<dynamic> jsonHole = <dynamic>[];
       for (final LatLng point in hole) {
-        jsonHole.add(point._toJson());
+        jsonHole.add(point.toJson());
       }
       result.add(jsonHole);
     }

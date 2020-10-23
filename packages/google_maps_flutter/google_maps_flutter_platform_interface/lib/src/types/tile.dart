@@ -1,4 +1,4 @@
-import 'dart:ui' show hashValues;
+import 'dart:typed_data';
 import 'package:meta/meta.dart' show immutable, required;
 
 /// Contains information about a Tile that is returned by a [TileProvider].

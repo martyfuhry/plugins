@@ -1,5 +1,8 @@
 import 'dart:ui' show hashValues;
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart' show immutable, required;
+
+import 'types.dart';
 
 /// [TileProvider] update events to be applied to the [GoogleMap].
 ///
@@ -102,4 +105,23 @@ class _TileOverlayUpdates {
         'tileOverlayIdsToRemove: $tileOverlayIdsToRemove, '
         'tileOverlaysToChange: $tileOverlaysToChange}';
   }
+}
+Map<TileOverlayId, TileOverlay> _keyTileOverlayId(
+    Iterable<TileOverlay> tileOverlays) {
+  if (tileOverlays == null) {
+    return <TileOverlayId, TileOverlay>{};
+  }
+  return Map<TileOverlayId, TileOverlay>.fromEntries(tileOverlays.map(
+          (TileOverlay tileOverlay) => MapEntry<TileOverlayId, TileOverlay>(
+          tileOverlay.tileOverlayId, tileOverlay)));
+}
+
+List<Map<String, dynamic>> _serializeTileOverlaySet(
+    Set<TileOverlay> tileOverlays) {
+  if (tileOverlays == null) {
+    return null;
+  }
+  return tileOverlays
+      .map<Map<String, dynamic>>((TileOverlay p) => p.toJson())
+      .toList();
 }
