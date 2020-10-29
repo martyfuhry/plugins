@@ -60,7 +60,11 @@ public class TileProviderController implements TileProvider {
         return TileProvider.NO_TILE;
       }
       try {
-        return new Tile(512, 512, (byte [])result);
+        if (result == null) {
+          return TileProvider.NO_TILE;
+        } else {
+          return new Tile(512, 512, (byte [])result);
+        }
       } catch (Exception ex) {
         Log.e(TAG, "Can't parse tile data", ex);
         return TileProvider.NO_TILE;
