@@ -393,7 +393,7 @@ class _GoogleMapState extends State<GoogleMap> {
     }
   }
 
-  Future<Map<String, dynamic>> onGetTile(
+  Future<Uint8List> onGetTile(
       String tileOverlayIdParam, int x, int y, int zoom) async {
     assert(tileOverlayIdParam != null);
     final TileOverlayId tileOverlayId = TileOverlayId(tileOverlayIdParam);
@@ -405,7 +405,7 @@ class _GoogleMapState extends State<GoogleMap> {
     if (tile == null) {
       tile = TileProvider.noTile;
     }
-    return tile._toJson();
+    return tile.data;
   }
 }
 
