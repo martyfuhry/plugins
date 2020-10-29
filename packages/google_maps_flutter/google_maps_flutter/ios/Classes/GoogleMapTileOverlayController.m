@@ -77,8 +77,8 @@
          arguments:@{@"tileOverlayId" : _tileOverlayId, @"x" : xn, @"y" : yn, @"zoom" : zoomn}
             result:^(id _Nullable result) {
               UIImage* tileImage;
-              if ([result isKindOfClass:[NSDictionary class]]) {
-                FlutterStandardTypedData* typedData = (FlutterStandardTypedData*)result[@"data"];
+              if ([result isKindOfClass:[FlutterStandardTypedData class]]) {
+                FlutterStandardTypedData* typedData = (FlutterStandardTypedData*)result;
                 tileImage = [UIImage imageWithData:typedData.data];
               } else {
                 if ([result isKindOfClass:[FlutterError class]]) {
