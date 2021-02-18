@@ -85,6 +85,13 @@ class TileOverlaysController {
     TileOverlayBuilder tileOverlayOptionsBuilder = new TileOverlayBuilder();
     String tileOverlayId =
         Convert.interpretTileOverlayOptions(tileOverlayOptions, tileOverlayOptionsBuilder);
+
+    // Workaround for making sure we don't double add the tile overlay
+    if (tileOverlayIdToController.containsKey(tileOverlayId)) {
+      // Already contains this tile overlay, remove it and re-add it
+      removeTileOverlay(tileOverlayId);
+    }
+
     TileProviderController tileProviderController =
         new TileProviderController(methodChannel, tileOverlayId);
     tileOverlayOptionsBuilder.setTileProvider(tileProviderController);
