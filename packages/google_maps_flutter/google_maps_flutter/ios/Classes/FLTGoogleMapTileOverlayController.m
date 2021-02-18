@@ -185,7 +185,7 @@ static void InterpretTileOverlayOptions(NSDictionary* data,
     // Workaround for making sure we don't double add the tile overlay
     if ([self.tileOverlayIdToController objectForKey: tileOverlayId]) {
       // Already contains this tile overlay, remove it and re-add it
-      [self.removeTileOverlay: tileOverlayId];
+      [self removeTileOverlay:tileOverlayId];
     }
 
     FLTTileProviderController* tileProvider =
@@ -212,7 +212,7 @@ static void InterpretTileOverlayOptions(NSDictionary* data,
 - (void)removeTileOverlay:(NSString*)tileOverlayId {
   FLTGoogleMapTileOverlayController* controller = self.tileOverlayIdToController[tileOverlayId];
   if (!controller) {
-    continue;
+    return;
   }
   [controller removeTileOverlay];
   [self.tileOverlayIdToController removeObjectForKey:tileOverlayId];
@@ -221,7 +221,7 @@ static void InterpretTileOverlayOptions(NSDictionary* data,
 
 - (void)removeTileOverlayIds:(NSArray*)tileOverlayIdsToRemove {
   for (NSString* tileOverlayId in tileOverlayIdsToRemove) {
-     [self.removeTileOverlay: tileOverlayId];
+     [self removeTileOverlay:tileOverlayId];
   }
 }
 
