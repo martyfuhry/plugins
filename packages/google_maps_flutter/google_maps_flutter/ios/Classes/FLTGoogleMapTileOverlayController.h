@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
            registrar:(NSObject<FlutterPluginRegistrar> *)registrar;
 - (void)addTileOverlays:(NSArray *)tileOverlaysToAdd;
 - (void)changeTileOverlays:(NSArray *)tileOverlaysToChange;
+- (void)removeTileOverlay:(NSString *)tileOverlayId;
 - (void)removeTileOverlayIds:(NSArray *)tileOverlayIdsToRemove;
 - (void)clearTileCache:(NSString *)tileOverlayId;
 - (nullable NSDictionary *)getTileOverlayInfo:(NSString *)tileverlayId;
